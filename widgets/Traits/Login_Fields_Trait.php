@@ -3,6 +3,7 @@
 namespace ElementorLoginRegister\Widgets\Traits;
 
 use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -123,6 +124,159 @@ trait Login_Fields_Trait {
 				'label'   => esc_html__( 'Forgot Password Link Text', 'elementor-login-register' ),
 				'type'    => Controls_Manager::TEXT,
 				'default' => esc_html__( 'Forgot your password?', 'elementor-login-register' ),
+			]
+		);
+
+		$this->end_controls_section();
+	}
+
+	protected function register_login_style_controls( string $id_prefix = '', string $label_prefix = '' ): void {
+		$input_selector = '{{WRAPPER}} .llr-login-form__form input[type="text"], {{WRAPPER}} .llr-login-form__form input[type="password"], {{WRAPPER}} .llr-login-form__form input[type="email"]';
+		$submit_selector = '{{WRAPPER}} .llr-login-form__submit';
+
+		$this->start_controls_section(
+			$id_prefix . 'section_login_style',
+			[
+				'label' => $label_prefix . esc_html__( 'Login Form Style', 'elementor-login-register' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_heading_style_input',
+			[
+				'label' => esc_html__( 'Input Fields', 'elementor-login-register' ),
+				'type'  => Controls_Manager::HEADING,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => $id_prefix . 'login_input_typography',
+				'label'    => esc_html__( 'Typography', 'elementor-login-register' ),
+				'selector' => $input_selector,
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_input_text_color',
+			[
+				'label'     => esc_html__( 'Text Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#1e1e1e',
+				'selectors' => [
+					$input_selector => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_input_bg_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'selectors' => [
+					$input_selector => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_input_border_color',
+			[
+				'label'     => esc_html__( 'Border Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#cccccc',
+				'selectors' => [
+					$input_selector => 'border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_heading_style_submit',
+			[
+				'label'     => esc_html__( 'Submit Button', 'elementor-login-register' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => $id_prefix . 'login_submit_typography',
+				'label'    => esc_html__( 'Typography', 'elementor-login-register' ),
+				'selector' => $submit_selector,
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_submit_text_color',
+			[
+				'label'     => esc_html__( 'Text Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#ffffff',
+				'selectors' => [
+					$submit_selector => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_submit_bg_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#2271b1',
+				'selectors' => [
+					$submit_selector => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_submit_bg_hover_color',
+			[
+				'label'     => esc_html__( 'Hover Background Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#135e96',
+				'selectors' => [
+					$submit_selector . ':hover' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_heading_style_spacing',
+			[
+				'label'     => esc_html__( 'Spacing', 'elementor-login-register' ),
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_responsive_control(
+			$id_prefix . 'login_fields_gap',
+			[
+				'label'      => esc_html__( 'Gap Between Fields', 'elementor-login-register' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 60,
+					],
+				],
+				'default'    => [
+					'size' => 16,
+					'unit' => 'px',
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .llr-login-form__field' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+				],
 			]
 		);
 

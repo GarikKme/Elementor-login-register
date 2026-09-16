@@ -39,6 +39,7 @@ class Registration_Form extends Widget_Base {
 
 	protected function register_controls(): void {
 		$this->register_registration_content_controls();
+		$this->register_registration_style_controls();
 	}
 
 	protected function render(): void {

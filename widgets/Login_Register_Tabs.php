@@ -5,6 +5,7 @@ namespace ElementorLoginRegister\Widgets;
 use ElementorLoginRegister\Widgets\Traits\Login_Fields_Trait;
 use ElementorLoginRegister\Widgets\Traits\Registration_Fields_Trait;
 use Elementor\Controls_Manager;
+use Elementor\Group_Control_Typography;
 use Elementor\Widget_Base;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -91,6 +92,71 @@ class Login_Register_Tabs extends Widget_Base {
 		);
 
 		$this->register_registration_content_controls(
+			self::REGISTER_ID_PREFIX,
+			esc_html__( 'Register', 'elementor-login-register' ) . ': '
+		);
+
+		$this->start_controls_section(
+			'section_tabs_style',
+			[
+				'label' => esc_html__( 'Tabs Nav Style', 'elementor-login-register' ),
+				'tab'   => Controls_Manager::TAB_STYLE,
+			]
+		);
+
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
+			[
+				'name'     => 'tabs_nav_typography',
+				'label'    => esc_html__( 'Typography', 'elementor-login-register' ),
+				'selector' => '{{WRAPPER}} .llr-tabs__tab',
+			]
+		);
+
+		$this->add_control(
+			'tabs_inactive_color',
+			[
+				'label'     => esc_html__( 'Inactive Tab Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#6b6b6b',
+				'selectors' => [
+					'{{WRAPPER}} .llr-tabs__tab' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'tabs_active_color',
+			[
+				'label'     => esc_html__( 'Active Tab Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#1e1e1e',
+				'selectors' => [
+					'{{WRAPPER}} .llr-tabs__tab--active' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'tabs_active_bg_color',
+			[
+				'label'     => esc_html__( 'Active Tab Background Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'transparent',
+				'selectors' => [
+					'{{WRAPPER}} .llr-tabs__tab--active' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->register_login_style_controls(
+			self::LOGIN_ID_PREFIX,
+			esc_html__( 'Login', 'elementor-login-register' ) . ': '
+		);
+
+		$this->register_registration_style_controls(
 			self::REGISTER_ID_PREFIX,
 			esc_html__( 'Register', 'elementor-login-register' ) . ': '
 		);

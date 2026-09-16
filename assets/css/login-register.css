@@ -12,31 +12,126 @@
     color: #27ae60;
 }
 
+.llr-login-form,
+.llr-register-form {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.llr-login-form *,
+.llr-register-form * {
+    box-sizing: border-box;
+}
+
+.llr-login-form__field,
+.llr-register-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    margin: 0 0 1em;
+    max-width: 100%;
+}
+
+.llr-login-form__field input,
+.llr-register-form__field input {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.5em 0.75em;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.llr-login-form__field--checkbox,
+.llr-register-form__field--checkbox {
+    flex-direction: row;
+    align-items: center;
+}
+.llr-login-form__field--checkbox input,
+.llr-register-form__field--checkbox input {
+    width: fit-content;
+}
+
+.llr-login-form__submit,
+.llr-register-form__submit {
+    width: auto;
+    max-width: 100%;
+    padding: 0.6em 1.25em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.llr-tabs {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 .llr-tabs__nav {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5em;
     margin-bottom: 1em;
 }
 
 .llr-tabs__nav .llr-tabs__tab {
-    /* background: currentColor; */
+    background: none;
     border: none;
-    /* border-bottom: 2px solid transparent; */
     padding: 0.5em 0.75em;
     cursor: pointer;
     font: inherit;
     opacity: 0.6;
-    /* color: #fff; */
+}
+
+.llr-tabs__nav .llr-tabs__tab:hover,
+.llr-tabs__nav .llr-tabs__tab:focus {
+    background: none;
+    opacity: 0.85;
+}
+
+.llr-tabs__nav .llr-tabs__tab:focus-visible {
+    background: none;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 .llr-tabs__nav .llr-tabs__tab--active {
-    /* border-bottom-color: currentColor; */
-    background: #c36;
-    color: #fff;
     opacity: 1;
     font-weight: 600;
 }
 
+.llr-tabs__nav .llr-tabs__tab--active:hover,
+.llr-tabs__nav .llr-tabs__tab--active:focus {
+    background: none;
+    opacity: 1;
+}
+
 .llr-tabs__panel[hidden] {
     display: none;
+}
+
+@media (max-width: 480px) {
+    .llr-login-form__form,
+    .llr-register-form__form {
+        font-size: 0.9em;
+    }
+
+    .llr-login-form__field input,
+    .llr-register-form__field input {
+        padding: 0.5em;
+    }
+
+    .llr-login-form__submit,
+    .llr-register-form__submit {
+        width: 100%;
+    }
+
+    .llr-tabs__nav {
+        flex-wrap: wrap;
+    }
+
+    .llr-tabs__nav .llr-tabs__tab {
+        flex: 1 1 auto;
+        text-align: center;
+        padding: 0.5em 0.5em;
+    }
 }

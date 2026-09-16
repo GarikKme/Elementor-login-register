@@ -39,6 +39,7 @@ class Login_Form extends Widget_Base {
 
 	protected function register_controls(): void {
 		$this->register_login_content_controls();
+		$this->register_login_style_controls();
 	}
 
 	protected function render(): void {
