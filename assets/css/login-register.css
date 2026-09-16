@@ -1,0 +1,13 @@
+.llr-form-message {
+	margin-top: 1em;
+	font-size: 0.9em;
+	min-height: 1.2em;
+}
+
+.llr-form-message.llr-error {
+	color: #c0392b;
+}
+
+.llr-form-message.llr-success {
+	color: #27ae60;
+}
