@@ -107,6 +107,39 @@
 		tabsEl.setAttribute( 'data-active', targetTab );
 	}
 
+	function handlePasswordToggleClick( event ) {
+		const toggleButton = event.target.closest( '.llr-password-toggle' );
+
+		if ( ! toggleButton ) {
+			return;
+		}
+
+		const wrapper = toggleButton.closest( '.llr-password-field' );
+		const input = wrapper ? wrapper.querySelector( 'input' ) : null;
+
+		if ( ! input ) {
+			return;
+		}
+
+		const willShow = 'password' === input.type;
+
+		input.type = willShow ? 'text' : 'password';
+		toggleButton.setAttribute( 'aria-pressed', willShow ? 'true' : 'false' );
+		toggleButton.setAttribute( 'aria-label', willShow ? 'Hide password' : 'Show password' );
+
+		const showIcon = toggleButton.querySelector( '.llr-password-toggle__icon--show' );
+		const hideIcon = toggleButton.querySelector( '.llr-password-toggle__icon--hide' );
+
+		if ( showIcon ) {
+			showIcon.toggleAttribute( 'hidden', willShow );
+		}
+
+		if ( hideIcon ) {
+			hideIcon.toggleAttribute( 'hidden', ! willShow );
+		}
+	}
+
 	document.addEventListener( 'submit', handleSubmit );
 	document.addEventListener( 'click', handleTabClick );
+	document.addEventListener( 'click', handlePasswordToggleClick );
 } )();

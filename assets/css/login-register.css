@@ -135,3 +135,42 @@
         padding: 0.5em 0.5em;
     }
 }
+
+.llr-password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+}
+
+.llr-password-field input {
+    padding-right: 2.25em;
+}
+
+.llr-password-field .llr-password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 0.5em;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    background-color: transparent;
+    border: none;
+    padding: 0.25em;
+    margin: 0;
+    line-height: 0;
+    cursor: pointer;
+    color: inherit;
+}
+
+.llr-password-field .llr-password-toggle:hover,
+.llr-password-field .llr-password-toggle:focus {
+    opacity: 0.8;
+}
+
+.llr-password-toggle__icon[hidden] {
+    display: none;
+}

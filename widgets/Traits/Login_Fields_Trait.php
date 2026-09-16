@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 trait Login_Fields_Trait {
 
+	use Password_Toggle_Trait;
+
 	protected function register_login_content_controls( string $id_prefix = '', string $label_prefix = '' ): void {
 		$this->start_controls_section(
 			$id_prefix . 'section_form_settings',
@@ -196,6 +198,30 @@ trait Login_Fields_Trait {
 		);
 
 		$this->add_control(
+			$id_prefix . 'login_password_toggle_color',
+			[
+				'label'     => esc_html__( 'Password Toggle Icon Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => '#1e1e1e',
+				'selectors' => [
+					'{{WRAPPER}} .llr-login-form__form .llr-password-toggle' => 'color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			$id_prefix . 'login_password_toggle_bg_color',
+			[
+				'label'     => esc_html__( 'Password Toggle Background Color', 'elementor-login-register' ),
+				'type'      => Controls_Manager::COLOR,
+				'default'   => 'transparent',
+				'selectors' => [
+					'{{WRAPPER}} .llr-login-form__form .llr-password-toggle' => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->add_control(
 			$id_prefix . 'login_heading_style_submit',
 			[
 				'label'     => esc_html__( 'Submit Button', 'elementor-login-register' ),
@@ -336,12 +362,15 @@ trait Login_Fields_Trait {
 					<label for="<?php echo esc_attr( $widget_id ); ?>-password">
 						<?php echo esc_html( $label_password ); ?>
 					</label>
-					<input
-						type="password"
-						id="<?php echo esc_attr( $widget_id ); ?>-password"
-						name="llr_password"
-						required
-					>
+					<span class="llr-password-field">
+						<input
+							type="password"
+							id="<?php echo esc_attr( $widget_id ); ?>-password"
+							name="llr_password"
+							required
+						>
+						<?php $this->render_password_toggle_button(); ?>
+					</span>
 				</p>
 
 				<?php if ( $show_remember_me ) : ?>

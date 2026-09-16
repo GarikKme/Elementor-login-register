@@ -14,8 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Login_Register_Tabs extends Widget_Base {
 
-	use Login_Fields_Trait;
-	use Registration_Fields_Trait;
+	use Login_Fields_Trait, Registration_Fields_Trait {
+		Login_Fields_Trait::render_password_toggle_button insteadof Registration_Fields_Trait;
+	}
 
 	private const LOGIN_ID_PREFIX    = 'login_';
 	private const REGISTER_ID_PREFIX = 'register_';
