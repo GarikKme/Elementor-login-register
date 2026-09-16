@@ -1,0 +1,15 @@
+{
+    "name": "cba/elementor-login-register",
+    "description": "Elementor widgets for login and registration.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "ElementorLoginRegister\\Includes\\": "includes/",
+            "ElementorLoginRegister\\Widgets\\": "widgets/"
+        }
+    }
+}
