@@ -1,6 +1,9 @@
 ( function () {
 	'use strict';
 
+	const TRACKED_FORM_SELECTOR = '.llr-login-form__form, .llr-register-form__form';
+	const FORM_WRAPPER_SELECTOR = '.llr-login-form, .llr-register-form';
+
 	function getSettings() {
 		return window.llrLoginRegister || {};
 	}
@@ -8,15 +11,15 @@
 	function handleSubmit( event ) {
 		const form = event.target;
 
-		if ( ! form.classList || ! form.classList.contains( 'llr-login-form__form' ) ) {
+		if ( ! form.matches || ! form.matches( TRACKED_FORM_SELECTOR ) ) {
 			return;
 		}
 
 		event.preventDefault();
 
-		const wrapper = form.closest( '.llr-login-form' );
+		const wrapper = form.closest( FORM_WRAPPER_SELECTOR );
 		const messageEl = wrapper ? wrapper.querySelector( '.llr-form-message' ) : null;
-		const submitButton = form.querySelector( '.llr-login-form__submit' );
+		const submitButton = form.querySelector( 'button[type="submit"]' );
 		const settings = getSettings();
 		const ajaxUrl = settings.ajaxUrl || '/wp-admin/admin-ajax.php';
 
@@ -42,7 +45,7 @@
 
 				if ( response && response.success ) {
 					if ( messageEl ) {
-						messageEl.textContent = data.message || 'Login successful. Redirecting…';
+						messageEl.textContent = data.message || 'Success. Redirecting…';
 						messageEl.classList.add( 'llr-success' );
 					}
 
@@ -54,7 +57,7 @@
 				}
 
 				if ( messageEl ) {
-					messageEl.textContent = data.message || 'Login failed. Please try again.';
+					messageEl.textContent = data.message || 'Request failed. Please try again.';
 					messageEl.classList.add( 'llr-error' );
 				}
 

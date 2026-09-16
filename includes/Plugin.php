@@ -24,6 +24,7 @@ class Plugin {
 		add_action( 'wp_enqueue_scripts', [ $this, 'register_assets' ] );
 
 		new \ElementorLoginRegister\Ajax\Login_Handler();
+		new \ElementorLoginRegister\Ajax\Registration_Handler();
 	}
 
 	public function register_categories( \Elementor\Elements_Manager $elements_manager ): void {
@@ -38,6 +39,7 @@ class Plugin {
 
 	public function register_widgets( \Elementor\Widgets_Manager $widgets_manager ): void {
 		$widgets_manager->register( new \ElementorLoginRegister\Widgets\Login_Form() );
+		$widgets_manager->register( new \ElementorLoginRegister\Widgets\Registration_Form() );
 	}
 
 	public function register_assets(): void {
