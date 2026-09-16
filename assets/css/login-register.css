@@ -1,13 +1,42 @@
 .llr-form-message {
-	margin-top: 1em;
-	font-size: 0.9em;
-	min-height: 1.2em;
+    margin-top: 1em;
+    font-size: 0.9em;
+    min-height: 1.2em;
 }
 
 .llr-form-message.llr-error {
-	color: #c0392b;
+    color: #c0392b;
 }
 
 .llr-form-message.llr-success {
-	color: #27ae60;
+    color: #27ae60;
+}
+
+.llr-tabs__nav {
+    display: flex;
+    gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.llr-tabs__nav .llr-tabs__tab {
+    /* background: currentColor; */
+    border: none;
+    /* border-bottom: 2px solid transparent; */
+    padding: 0.5em 0.75em;
+    cursor: pointer;
+    font: inherit;
+    opacity: 0.6;
+    /* color: #fff; */
+}
+
+.llr-tabs__nav .llr-tabs__tab--active {
+    /* border-bottom-color: currentColor; */
+    background: #c36;
+    color: #fff;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.llr-tabs__panel[hidden] {
+    display: none;
 }

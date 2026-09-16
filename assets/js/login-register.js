@@ -77,5 +77,36 @@
 			} );
 	}
 
+	function handleTabClick( event ) {
+		const tabButton = event.target.closest( '.llr-tabs [data-tab]' );
+
+		if ( ! tabButton ) {
+			return;
+		}
+
+		const tabsEl = tabButton.closest( '.llr-tabs' );
+
+		if ( ! tabsEl ) {
+			return;
+		}
+
+		const targetTab = tabButton.getAttribute( 'data-tab' );
+
+		tabsEl.querySelectorAll( '.llr-tabs__tab' ).forEach( function ( button ) {
+			const isActive = button.getAttribute( 'data-tab' ) === targetTab;
+			button.classList.toggle( 'llr-tabs__tab--active', isActive );
+			button.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
+		} );
+
+		tabsEl.querySelectorAll( '.llr-tabs__panel' ).forEach( function ( panel ) {
+			const isActive = panel.getAttribute( 'data-tab-panel' ) === targetTab;
+			panel.classList.toggle( 'llr-tabs__panel--active', isActive );
+			panel.toggleAttribute( 'hidden', ! isActive );
+		} );
+
+		tabsEl.setAttribute( 'data-active', targetTab );
+	}
+
 	document.addEventListener( 'submit', handleSubmit );
+	document.addEventListener( 'click', handleTabClick );
 } )();

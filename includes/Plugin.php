@@ -40,6 +40,7 @@ class Plugin {
 	public function register_widgets( \Elementor\Widgets_Manager $widgets_manager ): void {
 		$widgets_manager->register( new \ElementorLoginRegister\Widgets\Login_Form() );
 		$widgets_manager->register( new \ElementorLoginRegister\Widgets\Registration_Form() );
+		$widgets_manager->register( new \ElementorLoginRegister\Widgets\Login_Register_Tabs() );
 	}
 
 	public function register_assets(): void {
