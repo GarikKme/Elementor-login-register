@@ -137,7 +137,7 @@ class Registration_Handler {
 		wp_set_current_user( $user_id );
 		wp_set_auth_cookie( $user_id );
 
-		$redirect_url = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
+		$redirect_url = wp_validate_redirect( wp_unslash( $_POST['redirect_to'] ?? '' ), home_url( '/' ) );
 
 		wp_send_json_success(
 			[

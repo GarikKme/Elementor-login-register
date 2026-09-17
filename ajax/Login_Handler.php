@@ -110,7 +110,7 @@ class Login_Handler {
 			);
 		}
 
-		$redirect_url = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
+		$redirect_url = wp_validate_redirect( wp_unslash( $_POST['redirect_to'] ?? '' ), home_url( '/' ) );
 
 		wp_send_json_success(
 			[
