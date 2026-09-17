@@ -48,6 +48,19 @@ trait Registration_Fields_Trait {
 			]
 		);
 
+		$this->add_control(
+			$id_prefix . 'enable_recaptcha',
+			[
+				'label'        => esc_html__( 'Enable reCAPTCHA', 'elementor-login-register' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Enabled', 'elementor-login-register' ),
+				'label_off'    => esc_html__( 'Disabled', 'elementor-login-register' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+				'description'  => esc_html__( 'Requires ELR_RECAPTCHA_SITE_KEY / ELR_RECAPTCHA_SECRET_KEY to be set in plugin.php or wp-config.php.', 'elementor-login-register' ),
+			]
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -304,6 +317,7 @@ trait Registration_Fields_Trait {
 	protected function render_registration_form_markup( array $settings, string $id_prefix = '', string $element_id_prefix = 'llr-register' ): void {
 		$redirect_url        = $settings[ $id_prefix . 'redirect_url' ] ?? '';
 		$require_name_fields = 'yes' === ( $settings[ $id_prefix . 'require_name_fields' ] ?? '' );
+		$show_recaptcha      = 'yes' === ( $settings[ $id_prefix . 'enable_recaptcha' ] ?? '' ) && '' !== ELR_RECAPTCHA_SITE_KEY;
 
 		$label_first_name       = $settings[ $id_prefix . 'label_first_name' ] ?? '';
 		$label_last_name        = $settings[ $id_prefix . 'label_last_name' ] ?? '';
@@ -401,6 +415,12 @@ trait Registration_Fields_Trait {
 						<?php $this->render_password_toggle_button(); ?>
 					</span>
 				</p>
+
+				<?php if ( $show_recaptcha ) : ?>
+					<p class="llr-register-form__field llr-register-form__field--recaptcha">
+						<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( ELR_RECAPTCHA_SITE_KEY ); ?>"></div>
+					</p>
+				<?php endif; ?>
 
 				<p class="llr-register-form__field llr-register-form__field--submit">
 					<button type="submit" class="llr-register-form__submit">

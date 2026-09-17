@@ -21,6 +21,46 @@ class Login_Handler {
 			);
 		}
 
+		if ( '' !== ELR_RECAPTCHA_SECRET_KEY ) {
+			$recaptcha_token = isset( $_POST['g-recaptcha-response'] )
+				? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) )
+				: '';
+
+			if ( '' === $recaptcha_token ) {
+				wp_send_json_error(
+					[ 'message' => esc_html__( 'Please complete the reCAPTCHA verification.', 'elementor-login-register' ) ],
+					400
+				);
+			}
+
+			$verify_response = wp_remote_post(
+				'https://www.google.com/recaptcha/api/siteverify',
+				[
+					'body' => [
+						'secret'   => ELR_RECAPTCHA_SECRET_KEY,
+						'response' => $recaptcha_token,
+						'remoteip' => isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '',
+					],
+				]
+			);
+
+			if ( is_wp_error( $verify_response ) ) {
+				wp_send_json_error(
+					[ 'message' => esc_html__( 'Please complete the reCAPTCHA verification.', 'elementor-login-register' ) ],
+					400
+				);
+			}
+
+			$verify_body = json_decode( wp_remote_retrieve_body( $verify_response ), true );
+
+			if ( empty( $verify_body['success'] ) ) {
+				wp_send_json_error(
+					[ 'message' => esc_html__( 'Please complete the reCAPTCHA verification.', 'elementor-login-register' ) ],
+					400
+				);
+			}
+		}
+
 		$login_input = '';
 
 		foreach ( [ 'llr_login', 'llr_email', 'llr_username' ] as $field ) {

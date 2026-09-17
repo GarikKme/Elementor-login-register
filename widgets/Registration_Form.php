@@ -34,7 +34,7 @@ class Registration_Form extends Widget_Base {
 	}
 
 	public function get_script_depends(): array {
-		return [ 'llr-login-register' ];
+		return [ 'llr-login-register', 'llr-recaptcha' ];
 	}
 
 	protected function register_controls(): void {

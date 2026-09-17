@@ -74,6 +74,19 @@ trait Login_Fields_Trait {
 			]
 		);
 
+		$this->add_control(
+			$id_prefix . 'enable_recaptcha',
+			[
+				'label'        => esc_html__( 'Enable reCAPTCHA', 'elementor-login-register' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => esc_html__( 'Enabled', 'elementor-login-register' ),
+				'label_off'    => esc_html__( 'Disabled', 'elementor-login-register' ),
+				'return_value' => 'yes',
+				'default'      => 'no',
+				'description'  => esc_html__( 'Requires ELR_RECAPTCHA_SITE_KEY / ELR_RECAPTCHA_SECRET_KEY to be set in plugin.php or wp-config.php.', 'elementor-login-register' ),
+			]
+		);
+
 		$this->end_controls_section();
 
 		$this->start_controls_section(
@@ -314,6 +327,7 @@ trait Login_Fields_Trait {
 		$show_remember_me      = 'yes' === ( $settings[ $id_prefix . 'show_remember_me' ] ?? '' );
 		$show_forgot_password  = 'yes' === ( $settings[ $id_prefix . 'show_forgot_password' ] ?? '' );
 		$redirect_url          = $settings[ $id_prefix . 'redirect_url' ] ?? '';
+		$show_recaptcha        = 'yes' === ( $settings[ $id_prefix . 'enable_recaptcha' ] ?? '' ) && '' !== ELR_RECAPTCHA_SITE_KEY;
 
 		$label_username_email  = $settings[ $id_prefix . 'label_username_email' ] ?? '';
 		$label_password        = $settings[ $id_prefix . 'label_password' ] ?? '';
@@ -384,6 +398,12 @@ trait Login_Fields_Trait {
 							>
 							<?php echo esc_html( $label_remember_me ); ?>
 						</label>
+					</p>
+				<?php endif; ?>
+
+				<?php if ( $show_recaptcha ) : ?>
+					<p class="llr-login-form__field llr-login-form__field--recaptcha">
+						<div class="g-recaptcha" data-sitekey="<?php echo esc_attr( ELR_RECAPTCHA_SITE_KEY ); ?>"></div>
 					</p>
 				<?php endif; ?>
 

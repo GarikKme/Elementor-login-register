@@ -17,6 +17,17 @@ define( 'ELR_WIDGETS_VERSION', '1.0.0' );
 define( 'ELR_WIDGETS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'ELR_WIDGETS_URL', plugin_dir_url( __FILE__ ) );
 
+// Set your Google reCAPTCHA v2 (checkbox) keys here, or define() them in
+// wp-config.php before this file loads. Left empty, reCAPTCHA stays fully
+// disabled: no widget is rendered and no server-side verification call is made.
+if ( ! defined( 'ELR_RECAPTCHA_SITE_KEY' ) ) {
+	define( 'ELR_RECAPTCHA_SITE_KEY', '' );
+}
+
+if ( ! defined( 'ELR_RECAPTCHA_SECRET_KEY' ) ) {
+	define( 'ELR_RECAPTCHA_SECRET_KEY', '' );
+}
+
 register_activation_hook( __FILE__, 'elr_widgets_activate' );
 
 function elr_widgets_activate() {

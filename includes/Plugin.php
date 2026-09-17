@@ -67,5 +67,13 @@ class Plugin {
 				'homeUrl' => home_url( '/' ),
 			]
 		);
+
+		wp_register_script(
+			'llr-recaptcha',
+			'https://www.google.com/recaptcha/api.js',
+			[],
+			null,
+			true
+		);
 	}
 }
