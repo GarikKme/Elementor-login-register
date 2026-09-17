@@ -4,6 +4,12 @@ Adds three Elementor widgets — Login Form, Registration Form, and a combined
 Login + Registration Tabs widget — with AJAX submission, so site visitors can
 log in or create an account without leaving the page.
 
+**Status**: this plugin passed a full security audit covering open redirect,
+CSRF/nonces, privilege escalation, password handling, SQL injection,
+XSS/escaping, reCAPTCHA fail-closed behavior, direct file access, Composer
+hygiene, and trait visibility, with one finding (open redirect) that has
+since been fixed — see [Security](#5-security) for details.
+
 ## 1. Overview
 
 **Requirements**
@@ -26,6 +32,42 @@ log in or create an account without leaving the page.
   external form-builder dependency.
 - Every text label, the redirect URL, and a full Style tab (colors, typography,
   spacing) are editable per-widget-instance from the Elementor panel.
+- Show/hide password toggle on every password field (login, registration,
+  confirm password).
+- Optional Google reCAPTCHA v2 (checkbox) on both Login and Registration
+  forms, toggled independently per widget instance.
+
+## reCAPTCHA Setup (optional)
+
+1. Register your domain at
+   [google.com/recaptcha/admin](https://www.google.com/recaptcha/admin) as
+   reCAPTCHA v2 "I'm not a robot" Checkbox to get a **Site Key** and
+   **Secret Key**.
+2. Add both to `wp-config.php`, **before** the line that loads
+   `wp-settings.php`:
+   ```php
+   define( 'ELR_RECAPTCHA_SITE_KEY', 'your-site-key' );
+   define( 'ELR_RECAPTCHA_SECRET_KEY', 'your-secret-key' );
+   ```
+3. Then enable **"Enable reCAPTCHA"** per-widget under Content → Form
+   Settings (Login Form, Registration Form, or each panel independently
+   inside the Tabs widget).
+4. Leaving both keys empty (the default) disables reCAPTCHA entirely with
+   zero behavior change — no checkbox is rendered, no verification call is
+   made.
+
+**Design decision**: keys are set via `wp-config.php` constants rather than
+a plugin settings page. The TOR didn't specify a UI for this, and a global
+admin settings page would be a one-off exception to how every other setting
+in this plugin works — labels, redirect URLs, and styling are all already
+configured per-widget-instance through Elementor itself, not globally, so
+adding a single global settings page just for two API keys would be
+inconsistent with that pattern. `wp-config.php` is also how WordPress core
+itself recommends storing sensitive keys (see how `AUTH_KEY`/`SECRET_KEY`
+are handled) — it keeps secrets out of the database and out of anything a
+plugin update might overwrite. A dedicated settings page (Settings API +
+options table) would be the natural next step if this plugin needed more
+global configuration later.
 
 ## 2. Installation
 
@@ -187,14 +229,36 @@ PSR-4, not a WordPress-style naming convention.
 - **Nonces**: every AJAX request is verified with `check_ajax_referer()`
   (`llr_login_action` / `llr_register_action`) before any input is processed;
   failure returns a generic JSON error with HTTP 403 rather than exposing why.
+- **Redirect validation**: the post-submit redirect URL is validated with
+  `wp_validate_redirect()` (falling back to `home_url('/')`) in both
+  `Login_Handler.php` and `Registration_Handler.php` — a client-tampered
+  `redirect_to` hidden field pointing at an external domain is rejected
+  rather than followed, closing an open-redirect phishing vector that a
+  plain `esc_url_raw()` call does not close (it validates URL syntax, not
+  that the host is local).
+- **reCAPTCHA**: the secret key is server-side only, never exposed to the
+  client or localized to JS; verification is a direct server-to-server call
+  to Google's `siteverify` endpoint; all three failure modes (missing token,
+  network error, `success: false`) fail closed — the action is blocked, not
+  silently allowed — identically in both handlers.
+- **Unique nonce field IDs**: the hidden nonce input's `id` attribute is
+  generated per-widget-instance (`llr-login-nonce-{id}` /
+  `llr-register-nonce-{id}`) rather than a shared literal `id="nonce"`, so
+  the Login + Registration Tabs widget never renders two elements with a
+  duplicate DOM id when both forms are present on the same page.
 - **Sanitization**: `sanitize_text_field()` for names/usernames,
   `sanitize_email()` for email addresses, `wp_unslash()` on every raw
   `$_POST` value before use. Passwords are deliberately **not** run through
   `sanitize_text_field()` (which would strip characters) — only `wp_unslash()`
   and a cast to string, so any character a user legitimately typed survives.
 - **Output escaping**: `esc_html()`/`esc_html__()` for text content,
-  `esc_attr()`/`esc_attr__()` for HTML attributes, `esc_url()`/`esc_url_raw()`
-  for URLs — applied consistently across all render/trait markup.
+  `esc_attr()`/`esc_attr__()` for HTML attributes, `esc_url()` for URLs —
+  applied consistently across all render/trait markup. `esc_url_raw()` is no
+  longer used anywhere in the codebase: the redirect-URL Elementor control
+  itself has no sanitize callback (it's a plain text control), and the
+  runtime `redirect_to` POST value goes through `wp_validate_redirect()`
+  instead, which is a stronger validator (checks the host is local), not
+  just an escaper.
 - **Generic vs. specific error messages**: login failures always return the same
   "Invalid credentials" message regardless of whether the username/email or the
   password was wrong, so a failed login attempt can't be used to enumerate
@@ -216,10 +280,16 @@ PSR-4, not a WordPress-style naming convention.
 
 ## 6. Known limitations / not implemented
 
-- No CAPTCHA or rate-limiting on either form — both AJAX endpoints are open to
-  scripted submission at whatever rate a client can send requests.
+- No rate-limiting on either form — both AJAX endpoints are open to scripted
+  submission at whatever rate a client can send requests. reCAPTCHA (when
+  enabled) is not a substitute for this: it targets spam/bot registration
+  submissions, not brute-force login attempts against a known account —
+  different threats, and login has no rate-limiting either way.
 - No admin settings page — there is nothing to configure globally; all
-  configuration is per-widget-instance via the Elementor editor.
+  configuration (including the reCAPTCHA keys, set via `wp-config.php`
+  constants — see reCAPTCHA Setup) is per-widget-instance via the Elementor
+  editor or a config-file constant. A Settings API page would be a natural
+  addition if more global configuration is needed later.
 - No "resend verification email" / email confirmation flow — registration logs
   the user in immediately with no email verification step.
 - No password-strength meter — only a minimum length check (8 characters)
